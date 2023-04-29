@@ -328,7 +328,9 @@ def get_preview_image_by_model_path(model_path:str, max_size_preview, skip_nsfw_
     info_file = base + suffix + model.info_ext
 
     # check preview image
-    if not os.path.isfile(sec_preview):
+    if path.isfile(first_preview) or os.path.isfile(sec_preview):
+        pass
+    else:
         # need to download preview image
         util.printD("Checking preview image for model: " + model_path)
         # load model_info file
@@ -342,19 +344,17 @@ def get_preview_image_by_model_path(model_path:str, max_size_preview, skip_nsfw_
                 if model_info["images"]:
                     for img_dict in model_info["images"]:
                         if "nsfw" in img_dict.keys():
-                            if img_dict["nsfw"]:
-                                util.printD("This image is NSFW")
-                                if skip_nsfw_preview:
-                                    util.printD("Skip NSFW image")
-                                    continue
+                            util.printD("This image is NSFW")
+                            if skip_nsfw_preview:
+                                util.printD("Skip NSFW image")
+                                continue
                         
                         if "url" in img_dict.keys():
                             img_url = img_dict["url"]
                             if max_size_preview:
                                 # use max width
                                 if "width" in img_dict.keys():
-                                    if img_dict["width"]:
-                                        img_url = get_full_size_image_url(img_url, img_dict["width"])
+                                    img_url = get_full_size_image_url(img_url, img_dict["width"])
 
                             util.download_file(img_url, sec_preview)
                             # we only need 1 preview image
