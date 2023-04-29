@@ -328,7 +328,7 @@ def get_preview_image_by_model_path(model_path:str, max_size_preview, skip_nsfw_
     info_file = base + suffix + model.info_ext
 
     # check preview image
-    if path.isfile(first_preview) or os.path.isfile(sec_preview):
+    if os.path.isfile(first_preview) or os.path.isfile(sec_preview):
         pass
     else:
         # need to download preview image
